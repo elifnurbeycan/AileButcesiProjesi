@@ -9,30 +9,81 @@ body {
     flex-direction: column;
 }
 
-/* Container için ortak ayarlar */
-.login-container,
-.register-container,
-.container-main {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    max-width: 500px;
-    width: 100%;
-    margin: auto; /* Ortalamak için */
+/* Navbar */
+.navbar {
+    background-color: #007bff;
+    padding: 15px 0;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.navbar-brand {
+    font-weight: bold;
+    color: #fff !important;
+    font-size: 1.5rem;
+}
+.navbar-nav .nav-link {
+    color: #fff !important;
+    margin-left: 20px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.navbar-nav .nav-link:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-/* dashboard.php için container-main biraz farklı padding ile */
-.container-main {
-    max-width: 600px;
-    padding: 40px 0;
+/* İçerik alanı */
+main {
     flex-grow: 1;
+}
+.container-main {
+    padding: 40px 0;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Bazı sayfalarda tam ortalama */
+.container-main.d-flex.justify-content-center.align-items-center {
     justify-content: center;
     align-items: center;
 }
 
-/* welcome-card stili (dashboard için) */
+/* Ortak yuvarlak köşeler ve gölgeler */
+.rounded-3 {
+    border-radius: 0.5rem !important;
+}
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+}
+.card, .alert, .form-control, .form-select, .btn {
+    border-radius: 0.5rem;
+}
+
+/* Formlar için genel görünüm */
+.login-container,
+.register-container,
+.create-family-container,
+.join-family-container,
+.add-transaction-container,
+.transaction-form-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    max-width: 600px;
+    width: 100%;
+    margin: 20px auto;
+}
+
+/* Dashboard kartı */
 .welcome-card {
     background-color: #ffffff;
     padding: 30px;
@@ -41,57 +92,129 @@ body {
     text-align: center;
     max-width: 100%;
 }
-
 .welcome-card h3 {
     color: #007bff;
     font-weight: bold;
     margin-bottom: 20px;
 }
 
-/* Form elemanları */
-.form-control {
-    border-radius: 0.5rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+/* Liste ve özet kutuları */
+.family-list-container,
+.list-container,
+.summary-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    width: 100%;
+    margin: 20px auto;
 }
 
-.form-control:focus {
+/* Form alanları */
+.form-control:focus, .form-select:focus {
     border-color: #80bdff;
-    box-shadow: 0 0 0 0.25rem rgba(0,123,255,0.25);
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+.form-select {
+    border-radius: 0.5rem;
 }
 
-/* Butonlar */
+/* Ana butonlar */
 .btn-primary {
     background-color: #007bff;
     border-color: #007bff;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
     border-radius: 0.5rem;
     font-weight: 600;
     padding: 12px 20px;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    color: #fff !important;
 }
-
 .btn-primary:hover,
 .btn-primary:focus {
     background-color: #0056b3;
     border-color: #0056b3;
     box-shadow: none;
+    color: #fff !important;
 }
 
-/* Logout butonu (dashboard için) */
-.btn-logout {
+/* Outline mavi buton */
+.btn-outline-primary {
+    color: #fff !important;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-outline-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    color: #fff !important;
+}
+
+/* Diğer butonlar */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    color: #fff !important;
+}
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+    color: #fff !important;
+}
+.btn-danger {
     background-color: #dc3545;
     border-color: #dc3545;
+    color: white !important;
     transition: background-color 0.3s ease, border-color 0.3s ease;
     border-radius: 0.5rem;
-    font-weight: 600;
-    padding: 10px 20px;
 }
-
-.btn-logout:hover {
+.btn-danger:hover {
     background-color: #c82333;
     border-color: #bd2130;
 }
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    border-radius: 0.5rem;
+}
+.btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529 !important;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff !important;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
 
-/* Başlık stili */
+/* Listeleme butonları */
+.btn-action {
+    margin-right: 5px;
+    border-radius: 0.5rem;
+}
+
+/* Başlıklar */
 h2 {
     font-weight: 700;
     color: #007bff;
@@ -99,9 +222,29 @@ h2 {
     text-align: center;
 }
 
-/* Hata mesajları */
+/* Uyarılar */
 .alert {
     border-radius: 0.5rem;
+}
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-color: #bee5eb;
+}
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border-color: #ffeeba;
 }
 
 /* Linkler */
@@ -109,9 +252,105 @@ h2 {
     color: #007bff;
     text-decoration: none;
 }
-
 .text-center a:hover,
 .text-center a:focus {
     text-decoration: underline;
     color: #0056b3;
+}
+
+/* Tablolar */
+.table th, .table td {
+    vertical-align: middle;
+}
+.table thead th {
+    background-color: #e9ecef;
+    color: #495057;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+.table-responsive {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Gelir/gider metin renkleri */
+.text-income, .category-income {
+    color: #28a745;
+    font-weight: bold;
+}
+.text-expense, .category-expense {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Aile kartları */
+.family-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background-color: #fefefe;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.family-card h5 {
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+.family-card .badge {
+    font-size: 0.85em;
+    padding: 0.5em 0.75em;
+    border-radius: 5px;
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* Özet kartları */
+.summary-card {
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+.summary-card.income {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.summary-card.expense {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.summary-card.balance-positive {
+    background-color: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+}
+.summary-card.balance-negative {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.summary-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+.summary-card p {
+    font-size: 2rem;
+    margin-bottom: 0;
+}
+
+/* Aile seçimi formu */
+.family-select-form {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f2f4f6;
+    border-radius: 10px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
