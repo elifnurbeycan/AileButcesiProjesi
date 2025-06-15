@@ -2,15 +2,15 @@
 // Bu dosya, tüm sayfaların başında dahil edilecek ortak başlık (header) kısmıdır.
 // HTML <head> ve <body> etiketlerini açar, CSS ve navigasyon menüsünü içerir.
 
-// Uygulamanızın kök dizini için bir sabit tanımlayın.
-// XAMPP'de projeniz htdocs altında "aile_butcesi_projesi" ise bu "/aile_butcesi_projesi/" olmalıdır.
-// Canlı sunucuda ise genellikle "/" olabilir veya projeniz bir alt dizinde ise o dizin yolu olur.
-define('BASE_URL', '/aile_butcesi_projesi/');
-
-// Oturum başlatılmamışsa başlat (güvenlik için her sayfanın başında gerekli olabilir)
+// Oturum başlatılmamışsa başlat
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
+// config.php dosyasını dahil ederek BASE_URL ve veritabanı sabitlerine erişim sağlayın.
+// config.php'nin 'includes' klasörünün içinde olduğunu varsayıyoruz.
+require_once 'config.php'; 
+
 ?>
 <!DOCTYPE html>
 <html lang="tr">
