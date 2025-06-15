@@ -51,17 +51,29 @@ Uygulama, finansal şeffaflığı artırmayı ve aile içi bütçe yönetimini k
 
 ## Ekran Görüntüleri
 
-Projenizin çalışır durumdaki ekran görüntülerini ve kısa bir tanıtım videosunu buraya ekleyebilirsiniz.
+### Kullanıcı Yönetimi
+* **Giriş Sayfası:**
+    ![Giriş Sayfası](images/web1.png)
+* **Kayıt Sayfası:**
+    ![Kayıt Sayfası](images/web2.png)
 
-* [images/web1.png]
-* [images/web2.png]
-* [images/web3.png]
-* [images/web4.png]
-* [images/web5.png]
-* [images/web6.png]
-* [images/web7.png]
-* [images/web8.png]
-* [images/web9.png]
+### Anasayfa ve İşlem Yönetimi
+* **Anasayfa (Dashboard):**
+    ![Anasayfa](images/web3.png)
+* **İşlem Ekleme Formu:**
+    ![İşlem Ekleme Formu](images/web4.png)
+* **İşlemleri Listeleme:**
+    ![İşlemleri Listeleme](images/web5.png)
+
+### Aile ve Kategori Yönetimi
+* **Ailelerim Sayfası:**
+    ![Ailelerim Sayfası](images/web6.png)
+* **Aile Oluşturma Formu:**
+    ![Aile Oluşturma Formu](images/web7.png)
+* **Aileye Katılma Formu:**
+    ![Aileye Katılma Formu](images/web8.png)
+* **Kategorileri Yönetme:**
+    ![Kategorileri Yönetme](images/web9.png)
 
 
 ## Katkıda Bulunma
