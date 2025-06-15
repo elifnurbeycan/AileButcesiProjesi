@@ -1,229 +1,175 @@
 <?php
-// Oturum başlatılır. Bu, kullanıcının oturum bilgilerine erişmek için gereklidir.
+// Oturumu başlatıyoruz, daha önce başlamadıysa.
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Eğer kullanıcı giriş yapmamışsa, login sayfasına yönlendir.
+// Kullanıcı giriş yapmadıysa, login sayfasına yönlendir.
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-// Veritabanı bağlantı dosyasını dahil et.
+// Veritabanı bağlantısını dahil ediyoruz.
 require_once 'includes/db.php';
 
-// Hata ve başarı mesajlarını saklamak için boş diziler/değişkenler
+// Oturumdaki kullanıcı ID'sinin veritabanında geçerli olup olmadığını kontrol et.
+$user_id_from_session = $_SESSION['user_id'];
+$stmt_check_user = $conn->prepare("SELECT id, username FROM users WHERE id = ?");
+$stmt_check_user->bind_param("i", $user_id_from_session);
+$stmt_check_user->execute();
+$result_check_user = $stmt_check_user->get_result();
+
+if ($result_check_user->num_rows === 0) {
+    // Kullanıcı bulunamazsa oturumu temizleyip giriş sayfasına yönlendir.
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
+
+// Kullanıcı veritabanında varsa, bilgilerini oturuma güncelle.
+$current_user = $result_check_user->fetch_assoc();
+$_SESSION['user_id'] = $current_user['id'];
+$_SESSION['username'] = $current_user['username'];
+$stmt_check_user->close();
+
+// Header dosyasını ekliyoruz (burada <head> ve <body> açılır).
+require_once 'includes/header.php';
+
+// Hata ve başarı mesajlarını tutmak için boş diziler değişkenler oluşturuyoruz.
 $errors = [];
 $success_message = '';
 
-// Form gönderildi mi kontrol et
+// Form gönderilmiş mi kontrolü.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Form verisini al ve güvenlik için trim() fonksiyonu ile boşlukları temizle
+    // Form verilerini alıyoruz, gereksiz boşlukları temizliyoruz.
     $family_name = trim($_POST['family_name']);
+    $family_password = $_POST['family_password'] ?? '';
+    $confirm_password = $_POST['confirm_password'] ?? '';
 
-    // ----- Veri Doğrulama (Validation) -----
+    // ----- Veri doğrulama -----
 
     // Aile adı boş mu?
     if (empty($family_name)) {
         $errors[] = "Aile adı boş bırakılamaz.";
     } elseif (strlen($family_name) < 3 || strlen($family_name) > 100) {
-        $errors[] = "Aile adı 3 ile 100 karakter arasında olmalıdır.";
+        $errors[] = "Aile adı 3 ile 100 karakter arasında olmalı.";
     } elseif (!preg_match("/^[a-zA-Z0-9\sçÇğĞıİöÖşŞüÜ]+$/u", $family_name)) {
-        // Aile adı sadece harf, rakam ve boşluk içerebilir (Türkçe karakter desteği ile)
+        // Sadece harf, rakam ve boşluk olabilir (Türkçe karakter desteğiyle).
         $errors[] = "Aile adı sadece harf, rakam ve boşluk içerebilir.";
     }
 
-    // ----- Veritabanı Kontrolleri (Validation) -----
+    // Şifre boş mu, yeterince uzun mu?
+    if (empty($family_password)) {
+        $errors[] = "Aile şifresi boş bırakılamaz.";
+    } elseif (strlen($family_password) < 6) {
+        $errors[] = "Aile şifresi en az 6 karakter olmalı.";
+    }
 
-    // Eğer şu ana kadar hata yoksa, veritabanında aynı isimde bir aile zaten var mı kontrol et
+    // Şifreler eşleşiyor mu?
+    if ($family_password !== $confirm_password) {
+        $errors[] = "Şifreler eşleşmiyor.";
+    }
+
+    // ----- Veritabanı kontrolü -----
+
+    // Eğer şimdilik hata yoksa, aynı isimde aile var mı kontrolü yap.
     if (empty($errors)) {
         $stmt = $conn->prepare("SELECT id FROM families WHERE name = ?");
         $stmt->bind_param("s", $family_name);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows > 0) {
-            $errors[] = "Bu aile adı zaten kullanılıyor. Lütfen başka bir ad seçin.";
+            $errors[] = "Bu aile adı zaten kullanılıyor. Başka bir isim seçin.";
         }
         $stmt->close();
     }
 
-    // ----- Aile Oluşturma İşlemi -----
+    // ----- Aile oluşturma -----
 
-    // Eğer tüm kontrollerden geçtiyse, aileyi kaydet
+    // Hatalar yoksa aileyi veritabanına ekle.
     if (empty($errors)) {
-        $stmt = $conn->prepare("INSERT INTO families (name) VALUES (?)");
-        $stmt->bind_param("s", $family_name);
+        $hashed_password = password_hash($family_password, PASSWORD_DEFAULT);
+
+        $stmt = $conn->prepare("INSERT INTO families (name, password) VALUES (?, ?)");
+        $stmt->bind_param("ss", $family_name, $hashed_password);
 
         if ($stmt->execute()) {
-            $new_family_id = $stmt->insert_id; // Yeni oluşturulan ailenin ID'sini al
+            $new_family_id = $stmt->insert_id;
 
-            // Aileyi oluşturan kullanıcıyı otomatik olarak bu aileye üye olarak ekle
+            // Aileyi oluşturan kullanıcıyı bu ailenin yöneticisi yap.
             $user_id = $_SESSION['user_id'];
-            $stmt_member = $conn->prepare("INSERT INTO family_members (family_id, user_id, role) VALUES (?, ?, 'admin')"); // Aileyi oluşturan varsayılan olarak 'admin' olsun
+            $stmt_member = $conn->prepare("INSERT INTO family_members (family_id, user_id, role) VALUES (?, ?, 'admin')");
             $stmt_member->bind_param("ii", $new_family_id, $user_id);
 
             if ($stmt_member->execute()) {
-                $success_message = "Aile başarıyla oluşturuldu ve siz aileye yönetici olarak eklendiniz!";
-                // İsteğe bağlı: Aile oluşturulduktan sonra kullanıcının ailelerini listeleyen sayfaya yönlendir.
+                $success_message = "Aile başarıyla oluşturuldu ve yönetici olarak eklendiniz!";
+                // İstersen buradan aile listesine yönlendirebilirsin.
                 // header("Location: my_families.php");
                 // exit();
             } else {
-                // family_members eklemede hata oluşursa, aileyi de geri al (opsiyonel)
-                $errors[] = "Aile oluşturuldu ancak aileye üye eklenirken bir hata oluştu: " . $conn->error;
-                // Aileyi geri al (rollback) örneği
+                $errors[] = "Aile oluşturuldu ancak üyelik eklenirken hata oldu: " . $conn->error;
+                // İstersen aileyi geri silebilirsin (rollback).
                 // $conn->query("DELETE FROM families WHERE id = $new_family_id");
             }
             $stmt_member->close();
-
         } else {
-            $errors[] = "Aile oluşturulurken bir hata oluştu: " . $conn->error;
+            $errors[] = "Aile oluşturulurken hata oluştu: " . $conn->error;
         }
         $stmt->close();
     }
 }
 
-// Veritabanı bağlantısını kapat
+// Bağlantıyı kapatıyoruz.
 $conn->close();
 ?>
 
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aile Oluştur - Aile Bütçesi Uygulaması</title>
-    <!-- Bootstrap CSS v5.3 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Kendi özel CSS dosyanız -->
-    <link href="css/style.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+<!-- HTML kısmı -->
+<div class="container container-main">
+    <div class="create-family-container">
+        <h2 class="text-center mb-4 text-primary fw-bold">Yeni Aile Oluştur</h2>
+
+        <?php
+        // Hataları göster.
+        if (!empty($errors)) {
+            echo '<div class="alert alert-danger" role="alert"><ul>';
+            foreach ($errors as $error) {
+                echo '<li>' . htmlspecialchars($error) . '</li>';
+            }
+            echo '</ul></div>';
         }
-        .navbar {
-            background-color: #007bff;
-            padding: 15px 0;
+
+        // Başarı mesajını göster.
+        if (!empty($success_message)) {
+            echo '<div class="alert alert-success" role="alert">';
+            echo htmlspecialchars($success_message);
+            echo '</div>';
         }
-        .navbar-brand {
-            font-weight: bold;
-            color: #fff !important;
-            font-size: 1.5rem;
-        }
-        .navbar-nav .nav-link {
-            color: #fff !important;
-            margin-left: 20px;
-            font-weight: 500;
-        }
-        .navbar-nav .nav-link:hover {
-            color: rgba(255, 255, 255, 0.8) !important;
-        }
-        .container-main {
-            flex-grow: 1;
-            padding: 40px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .create-family-container {
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
-        }
-        .form-control:focus {
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-            border-radius: 8px;
-            font-weight: bold;
-            padding: 12px 20px;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-        .alert {
-            border-radius: 8px;
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="dashboard.php">Aile Bütçesi</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="dashboard.php">Anasayfa</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Harcamalar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Ailelerim</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="create_family.php">Aile Oluştur</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Çıkış Yap</a>
-                    </li>
-                </ul>
+        ?>
+
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+            <div class="mb-3">
+                <label for="family_name" class="form-label">Aile / Grup Adı</label>
+                <input type="text" class="form-control rounded-3" id="family_name" name="family_name" value="<?php echo htmlspecialchars($_POST['family_name'] ?? ''); ?>" required>
             </div>
-        </div>
-    </nav>
-
-    <div class="container container-main">
-        <div class="create-family-container">
-            <h2 class="text-center mb-4 text-primary fw-bold">Yeni Aile Oluştur</h2>
-
-            <?php
-            // Hata mesajlarını göster
-            if (!empty($errors)) {
-                echo '<div class="alert alert-danger" role="alert">';
-                echo '<ul>';
-                foreach ($errors as $error) {
-                    echo '<li>' . htmlspecialchars($error) . '</li>';
-                }
-                echo '</ul>';
-                echo '</div>';
-            }
-
-            // Başarı mesajını göster
-            if (!empty($success_message)) {
-                echo '<div class="alert alert-success" role="alert">';
-                echo htmlspecialchars($success_message);
-                echo '</div>';
-            }
-            ?>
-
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                <div class="mb-3">
-                    <label for="family_name" class="form-label">Aile / Grup Adı</label>
-                    <input type="text" class="form-control rounded-3" id="family_name" name="family_name" value="<?php echo htmlspecialchars($_POST['family_name'] ?? ''); ?>" required>
-                </div>
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">Aile Oluştur</button>
-                </div>
-            </form>
-        </div>
+            <div class="mb-3">
+                <label for="family_password" class="form-label">Aile Şifresi</label>
+                <input type="password" class="form-control rounded-3" id="family_password" name="family_password" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">Aile Şifresi (Tekrar)</label>
+                <input type="password" class="form-control rounded-3" id="confirm_password" name="confirm_password" required>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Aile Oluştur</button>
+            </div>
+        </form>
+        <p class="text-center mt-3">Zaten bir aileniz varsa <a href="join_family.php">Aileye Katıl</a> sayfasına gidin.</p>
     </div>
+</div>
 
-    <!-- Bootstrap JS (Popper.js ile birlikte) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
-</html>
+<?php
+// Footer dosyasını dahil ediyoruz.
+require_once 'includes/footer.php';
+?>
