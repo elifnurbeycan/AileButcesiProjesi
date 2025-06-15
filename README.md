@@ -46,51 +46,6 @@ Uygulama, finansal şeffaflığı artırmayı ve aile içi bütçe yönetimini k
 * **Güvenlik:** `password_hash()` ve `password_verify()` ile şifre hashleme, PHP Session ile oturum yönetimi.
 
 
-### Canlı Sunucuya Dağıtım (Hosting)
-
-1.  **Veritabanı Oluşturma:**
-    * Hosting kontrol panelinize (cPanel vb.) giriş yapın.
-    * `MySQL Veritabanları` bölümünden yeni bir veritabanı (örn. `kullaniciadi_butce`) ve bir veritabanı kullanıcısı (örn. `kullaniciadi_user`) oluşturun.
-    * Oluşturduğunuz kullanıcıya bu veritabanı üzerinde **tüm ayrıcalıkları** verin ve **tüm bu bilgileri not alın.**
-2.  **Veritabanı Şemasını Yükleme:**
-    * Hosting kontrol panelinizdeki `phpMyAdmin`'e giriş yapın.
-    * Sol menüden az önce oluşturduğunuz boş veritabanını seçin.
-    * `SQL` sekmesine tıklayın.
-    * Projenizin `schema.sql` dosyasını açın ve içindeki `DROP DATABASE`, `CREATE DATABASE`, `USE` komutlarını **silin**. Sadece `CREATE TABLE` ve `INSERT` komutlarını bırakın.
-    * Bu düzenlenmiş SQL kodunu `phpMyAdmin`'deki SQL sorgu alanına yapıştırın ve çalıştırın. Bu, tablolarınızı oluşturacaktır.
-3.  **Dosyaları Yükleme (`config.php`, `includes/header.php` ve `index.php` Güncellemeleri):**
-    * **`config.php` dosyasını güncelleyin:** Yerelinizdeki `includes/config.php` dosyasını açın ve `DB_SERVER`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME` değerlerini **canlı sunucuda oluşturduğunuz veritabanı bilgilerinizle** değiştirin.
-    * **`BASE_URL` değerini `config.php`'ye taşıyın:** `BASE_URL` tanımını `includes/header.php` dosyasından alıp `config.php`'ye taşıyın ve canlı URL'nize göre ayarlayın:
-        ```php
-        // config.php içinde
-        define('BASE_URL', '/~st24360859210/'); // Sizin hosting URL'nizdeki ~ kullanıcı adı kısmı
-        ```
-    * **`includes/header.php`'yi güncelleyin:** `includes/header.php` dosyanızda `BASE_URL` tanımını kaldırın ve dosyanın başında `require_once 'config.php';` satırını ekleyin (eğer `config.php` `includes` klasöründeyse).
-    * **`index.php`'yi güncelleyin:** Yerelinizdeki `index.php` dosyasını açın ve `header("Location: " . BASE_URL . "dashboard.php");` yönlendirmesinden önce sadece `require_once 'includes/config.php';` (veya konumuna göre `require_once 'config.php';`) olduğundan emin olun.
-4.  **FTP ile Dosyaları Yükleme:**
-    * [FileZilla Client](https://filezilla-project.org/) gibi bir FTP programı kullanın.
-    * Size verilen FTP Host, Kullanıcı Adı, Şifre ve Port (21) bilgilerini kullanarak sunucuya bağlanın.
-    * Yerel projenizin ana klasörünün içindeki **tüm dosyaları ve klasörleri** seçin (`add_transaction.php`, `css/`, `includes/` vb.).
-    * Bu dosyaları sunucudaki **`public_html` klasörünün içine** (veya `BASE_URL`'i `/aile_butcesi_projesi/` olarak ayarladıysanız `public_html/aile_butcesi_projesi/` klasörünün içine) sürükleyip bırakın.
-    * **Önemli:** Yüklerken çakışan dosyalar için "Üzerine Yaz" (Overwrite) seçeneğini onaylayın.
-5.  **Dosya İzinlerini Ayarlama (CHMOD):**
-    * FileZilla'da, `public_html` klasörünün üzerine sağ tıklayıp "Dosya İzinleri..." (File Permissions...) seçeneğini seçin.
-    * **Klasörler için:** Sayısal değeri `755` yapın, "Alt dizinlere yinele" ve "Sadece dizinlere uygula" seçeneklerini işaretleyip onaylayın.
-    * **Dosyalar için:** Tekrar `public_html` klasörüne sağ tıklayıp "Dosya İzinleri..." seçeneğini seçin. Sayısal değeri `644` yapın, "Alt dizinlere yinele" ve "Sadece dosyalara uygula" seçeneklerini işaretleyip onaylayın.
-6.  **Uygulamayı Test Etme:** Tarayıcınızda size verilen "Your website:" adresine (`http://95.130.171.20/~st24360859210`) gidin. Tarayıcı önbelleğini temizlemeyi (Ctrl+F5 veya Cmd+Shift+R) unutmayın.
-
-## Proje Uyumluluğu (Ödev Şartlarına Göre)
-
-Bu proje, Web Tabanlı Programlama dersinizin tüm temel şartlarını ve puanlama kriterlerini karşılamaktadır:
-
-* **Kullanıcı Yönetimi:** Kayıt, giriş/çıkış, şifre hashleme, oturum yönetimi tamamen mevcuttur.
-* **CRUD İşlemleri:** Bilgi girişi (Create), listeleme (Read), düzenleme (Update) ve silme (Delete) fonksiyonları (işlemler, aileler, kategoriler için) eksiksiz olarak uygulanmıştır.
-* **Teknolojiler:** PHP, MySQL, HTML, Bootstrap ve JavaScript kullanımı şartnameye uygundur. Arka uçta yalın PHP kullanılmıştır, herhangi bir framework içermez.
-* **Veritabanı:** Birden fazla MySQL tablosu kullanılmıştır.
-* **Güvenlik:** Şifreler hashlenerek saklanır ve oturumlar çerezler yerine PHP Session ile yönetilir.
-* **Arayüz:** Bootstrap ve özel CSS ile stillendirilmemiş öğe bulunmamaktadır.
-* **Hosting:** Uygulama canlı sunucuya dağıtılabilir şekilde yapılandırılmıştır.
-
 ## Ekran Görüntüleri ve Video
 
 Projenizin çalışır durumdaki ekran görüntülerini ve kısa bir tanıtım videosunu buraya ekleyebilirsiniz.
