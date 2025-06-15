@@ -7,7 +7,7 @@ Bu proje, PHP ve MySQL kullanarak geliştirilmiş, birden fazla kullanıcının 
 Uygulama, finansal şeffaflığı artırmayı ve aile içi bütçe yönetimini kolaylaştırmayı hedefler. Temel CRUD (Create, Read, Update, Delete) operasyonlarının yanı sıra, çoklu aile üyeliği ve roller gibi gelişmiş özellikler sunar.
 
 ### Canlı Uygulamaya Gitmek İçin Tıklayın: [Aile Bütçesi Uygulaması](http://95.130.171.20/~st24360859210/dashboard.php)
-### Tanıtım Videosu: [Proje Tanıtım Videosunu İzle](https://www.youtube.com/your-video-link-here)
+### Tanıtım Videosu: [Proje Tanıtım Videosunu İzle](https://youtu.be/A976tvMBdAg)
 
 ## Özellikler
 
