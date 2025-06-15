@@ -53,15 +53,15 @@ Uygulama, finansal şeffaflığı artırmayı ve aile içi bütçe yönetimini k
 
 Projenizin çalışır durumdaki ekran görüntülerini ve kısa bir tanıtım videosunu buraya ekleyebilirsiniz.
 
-* [images/web1]
-* [images/web2]
-* [images/web3]
-* [images/web4]
-* [images/web5]
-* [images/web6]
-* [images/web7]
-* [images/web8]
-* [images/web9]
+* [images/web1.png]
+* [images/web2.png]
+* [images/web3.png]
+* [images/web4.png]
+* [images/web5.png]
+* [images/web6.png]
+* [images/web7.png]
+* [images/web8.png]
+* [images/web9.png]
 
 
 ## Katkıda Bulunma
