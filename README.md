@@ -51,13 +51,13 @@ Uygulama, finansal şeffaflığı artırmayı ve aile içi bütçe yönetimini k
 
 ## Ekran Görüntüleri
 
-### Kullanıcı Yönetimi
+
 * **Giriş Sayfası:**
     ![Giriş Sayfası](images/web1.png)
 * **Kayıt Sayfası:**
     ![Kayıt Sayfası](images/web2.png)
 
-### Anasayfa ve İşlem Yönetimi
+
 * **Anasayfa (Dashboard):**
     ![Anasayfa](images/web3.png)
 * **İşlem Ekleme Formu:**
@@ -65,7 +65,7 @@ Uygulama, finansal şeffaflığı artırmayı ve aile içi bütçe yönetimini k
 * **İşlemleri Listeleme:**
     ![İşlemleri Listeleme](images/web5.png)
 
-### Aile ve Kategori Yönetimi
+
 * **Ailelerim Sayfası:**
     ![Ailelerim Sayfası](images/web6.png)
 * **Aile Oluşturma Formu:**
