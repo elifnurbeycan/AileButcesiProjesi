@@ -1,22 +1,23 @@
 <?php
-// Oturum başlatılır.
+// Oturum başlatıyoruz, eğer daha önce başlatılmamışsa.
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Kullanıcı giriş yapmamışsa, giriş sayfasına yönlendir.
+// Kullanıcı giriş yapmamışsa login sayfasına yönlendiriyoruz.
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-// Veritabanı bağlantı dosyasını dahil et.
+// Veritabanı bağlantısını dahil ediyoruz.
 require_once 'includes/db.php';
 
 $user_id = $_SESSION['user_id'];
 $family_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $message = "";
 
+// Aile ID'si geçerli değilse hata mesajı gösterip aileler sayfasına dönüyoruz.
 if (!$family_id) {
     $message = "Geçersiz veya eksik aile ID'si belirtildi.";
     $_SESSION['family_message'] = ['type' => 'danger', 'text' => $message];
@@ -24,7 +25,7 @@ if (!$family_id) {
     exit();
 }
 
-// Kullanıcının bu aileye üye olup olmadığını ve rolünü kontrol et
+// Kullanıcının bu aileye üye olup olmadığını ve rolünü kontrol ediyoruz.
 $user_is_member = false;
 $user_role = null;
 $stmt_check_member = $conn->prepare("SELECT role FROM family_members WHERE family_id = ? AND user_id = ?");
@@ -38,6 +39,7 @@ if ($result_check_member->num_rows > 0) {
 }
 $stmt_check_member->close();
 
+// Eğer kullanıcı aile üyesi değilse, hata verip geri gönderiyoruz.
 if (!$user_is_member) {
     $message = "Bu aileden ayrılmak için yetkiniz yok veya bu aileye üye değilsiniz.";
     $_SESSION['family_message'] = ['type' => 'danger', 'text' => $message];
@@ -45,12 +47,10 @@ if (!$user_is_member) {
     exit();
 }
 
-// Eğer ayrılan kişi bir admin ise ve ailede başka admin yoksa özel kontrol (isteğe bağlı)
-// Bu kısım daha ileri seviye iş mantığı için eklenebilir. Şimdilik sadece ayrılmasına izin veriyoruz.
-// Örn: Eğer son admin ayrılıyorsa, ailenin yönetimsiz kalmaması için bir uyarı veya aile silme zorunluluğu gibi.
-// Basitlik adına, mevcut durumda sadece aile üyesinin family_members tablosundan silinmesini sağlıyoruz.
+// Eğer kullanıcı adminse ve ailede başka admin yoksa ekstra kontrol yapılabilir.
+// Şimdilik sadece aileden çıkış işlemi yapıyoruz.
 
-// Aileden ayrılma işlemi: family_members tablosundan kaydı sil
+// Aileden ayrılma işlemini yapıyoruz: family_members tablosundan ilgili kaydı siliyoruz.
 $stmt_leave = $conn->prepare("DELETE FROM family_members WHERE family_id = ? AND user_id = ?");
 $stmt_leave->bind_param("ii", $family_id, $user_id);
 
@@ -65,7 +65,7 @@ $stmt_leave->close();
 
 $conn->close();
 
-// Kullanıcının aileler sayfasına geri yönlendir
+// İşlem sonrası aileler sayfasına yönlendiriyoruz.
 header("Location: my_families.php");
 exit();
 ?>
