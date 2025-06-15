@@ -1,85 +1,97 @@
-# Aile Bütçesi Yönetim Uygulaması
+# 🏠 Aile Bütçesi ve Ortak Harcama Yönetimi Uygulaması
 
-Bu proje, PHP ve MySQL kullanarak geliştirilmiş, birden fazla kullanıcının ortak aile bütçelerini etkili bir şekilde yönetmelerine olanak tanıyan web tabanlı bir uygulamadır. Kullanıcılar kişisel hesaplarını oluşturabilir, aile gruplarına katılabilir veya kendi ailelerini oluşturabilir, gelir ve gider işlemlerini kaydedebilir, kategorize edebilir, finansal özetlerini görüntüleyebilir ve genel bütçe durumlarını takip edebilirler.
+Bu proje, **PHP ve MySQL** kullanılarak geliştirilmiş, birden fazla kullanıcının ortak aile bütçelerini etkili bir şekilde yönetmelerine olanak tanıyan **web tabanlı bir uygulamadır**. 
 
-## Proje Hakkında
+Kullanıcılar:
+- Kişisel hesaplarını oluşturabilir
+- Aile gruplarına katılabilir veya yeni aileler oluşturabilir
+- Gelir ve gider işlemlerini kaydedebilir, kategorize edebilir
+- Finansal özetlerini görüntüleyebilir
+- Genel bütçe durumlarını takip edebilir
 
-Uygulama, finansal şeffaflığı artırmayı ve aile içi bütçe yönetimini kolaylaştırmayı hedefler. Temel CRUD (Create, Read, Update, Delete) operasyonlarının yanı sıra, çoklu aile üyeliği ve roller gibi gelişmiş özellikler sunar.
+---
 
-### Canlı Uygulamaya Gitmek İçin Tıklayın: [Aile Bütçesi Uygulaması](http://95.130.171.20/~st24360859210/dashboard.php)
-### Tanıtım Videosu: [Proje Tanıtım Videosunu İzle](https://youtu.be/A976tvMBdAg)
+## 📌 Proje Hakkında
 
-## Özellikler
+Uygulama, **finansal şeffaflığı artırmak** ve **aile içi bütçe yönetimini kolaylaştırmak** amacıyla tasarlanmıştır. Temel **CRUD (Create, Read, Update, Delete)** işlemlerinin yanı sıra çoklu kullanıcı desteği ve aile yönetimi gibi gelişmiş özellikler sunar.
 
-* **Kullanıcı Yönetimi:**
-    * Güvenli kullanıcı kaydı.
-    * E-posta ve şifre ile oturum açma (hashlenmiş şifreler).
-    * Oturum yönetimi ve güvenli çıkış.
-* **Aile/Grup Yönetimi:**
-    * Yeni aile/grup oluşturma (şifre korumalı).
-    * Mevcut ailelere katılma (şifre gereklidir).
-    * Üyesi olunan aileleri listeleme.
-    * Aile detaylarını ve üyelerini görüntüleme.
-    * Aileden ayrılma.
-    * Aileyi silme (sadece yöneticiler için ve tüm ilişkili verileri siler).
-* **İşlem Yönetimi:**
-    * Gelir ve gider işlemleri ekleme.
-    * İşlemleri ilgili kategoriye atama.
-    * İşlem açıklaması ve tarih belirleme.
-    * Seçilen bir aileye ait tüm işlemleri detaylı olarak listeleme.
-    * Mevcut işlemleri düzenleme.
-    * İşlemleri silme (onaylı).
-* **Kategori Yönetimi:**
-    * Yeni gelir ve gider kategorileri ekleme.
-    * Mevcut kategorileri listeleme.
-    * Kullanılmayan kategorileri silme (ilişkili işlem varsa engellenir).
-* **Finansal Özet:**
-    * Belirli bir aile için seçilen tarih aralığındaki toplam gelir, toplam gider ve net bakiye özetini görüntüleme.
-    * Kullanıcının üyesi olduğu tüm ailelerin ana sayfada (Dashboard) toplam net bakiyesini gösterme.
-* **Kullanıcı Arayüzü:**
-    * Duyarlı (responsive) tasarım ile mobil ve masaüstü cihazlarda uyumlu görünüm.
-    * Bootstrap 5.3 ve özel CSS ile modern ve sezgisel arayüz.
+🔗 **Canlı Uygulama:** [Aile Bütçesi Uygulaması](http://95.130.171.20/~st24360859210/dashboard.php)  
+📺 **Tanıtım Videosu:** [Proje Tanıtım Videosunu İzle](https://youtu.be/A976tvMBdAg)
 
-## Teknolojiler
+---
 
-* **Backend:** PHP (yalın kodlama, framework kullanılmamıştır)
-* **Veritabanı:** MySQL
-* **Frontend:** HTML5, CSS3 (Bootstrap 5.3 ile), JavaScript
-* **Veritabanı Bağlantısı:** MySQLi (PHP'nin yerleşik kütüphanesi)
-* **Güvenlik:** `password_hash()` ve `password_verify()` ile şifre hashleme, PHP Session ile oturum yönetimi.
+## 🚀 Özellikler
 
+### 👤 Kullanıcı Yönetimi
+- Güvenli kullanıcı kaydı
+- Hashlenmiş şifre ile giriş (`password_hash`)
+- Oturum yönetimi (PHP `session`)
+- Güvenli çıkış işlemi
 
-## Ekran Görüntüleri
+### 👪 Aile / Grup Yönetimi
+- Yeni aile oluşturma (şifre korumalı)
+- Mevcut aileye katılma (şifre ile)
+- Aile üyelerini listeleme
+- Aileden ayrılma
+- Aileyi silme (yalnızca yöneticiler için, ilişkili verileri de siler)
 
+### 💰 İşlem Yönetimi
+- Gelir ve gider işlemleri ekleme
+- Kategori ataması yapma
+- Açıklama ve tarih ekleme
+- Aileye göre işlemleri listeleme
+- İşlem düzenleme ve silme (onaylı)
 
-* **Giriş Sayfası:**
-    ![Giriş Sayfası](images/web1.png)
-* **Ailelerim Sayfası:**
-    ![Kayıt Sayfası](images/web2.png)
+### 📂 Kategori Yönetimi
+- Yeni gelir ve gider kategorileri ekleme
+- Mevcut kategorileri listeleme
+- Kullanılan kategorileri silememe (veri bütünlüğü için)
 
+### 📊 Finansal Özet
+- Tarih aralığına göre toplam gelir, gider ve net bakiye
+- Ana sayfada tüm ailelerin özet bakiyesi
 
-* **Aile Detayları:**
-    ![Anasayfa](images/web3.png)
-* **İşlem Ekleme Formu:**
-    ![İşlem Ekleme Formu](images/web4.png)
-* **İşlemleri Listeleme:**
-    ![İşlemleri Listeleme](images/web5.png)
+### 💻 Kullanıcı Arayüzü
+- Responsive tasarım (mobil ve masaüstü uyumlu)
+- Bootstrap 5.3 ve özel CSS ile modern arayüz
 
+---
 
-* **Finansal Özet:**
-    ![Ailelerim Sayfası](images/web6.png)
-* **Kategori Ekleme:**
-    ![Aile Oluşturma Formu](images/web7.png)
-* **Aileye Katılma Formu:**
-    ![Aileye Katılma Formu](images/web8.png)
-* **Aile Oluşturma Formu:**
-    ![Kategorileri Yönetme](images/web9.png)
+## 🧰 Kullanılan Teknolojiler
 
+| Katman     | Teknoloji               |
+|------------|--------------------------|
+| Backend    | PHP (yalın)              |
+| Veritabanı | MySQL                    |
+| Frontend   | HTML5, CSS3, Bootstrap 5.3, JavaScript |
+| Güvenlik   | `password_hash`, `session`, `password_verify` |
+| DB Bağlantısı | MySQLi (PHP yerleşik)  |
 
-## Katkıda Bulunma
+---
 
-Eğer bu projeyi geliştirmek isterseniz, lütfen bir "issue" açın veya "pull request" gönderin.
+## 🖼️ Ekran Görüntüleri
 
-## İletişim
+| Sayfa | Görsel |
+|-------|--------|
+| Giriş | ![Giriş Sayfası](images/web1.png) |
+| Ailelerim | ![Kayıt Sayfası](images/web2.png) |
+| Aile Detayları | ![Anasayfa](images/web3.png) |
+| İşlem Ekle | ![İşlem Ekleme Formu](images/web4.png) |
+| İşlem Listesi | ![İşlemleri Listeleme](images/web5.png) |
+| Finansal Özet | ![Ailelerim Sayfası](images/web6.png) |
+| Kategori Ekle | ![Aile Oluşturma Formu](images/web7.png) |
+| Aileye Katıl | ![Aileye Katılma Formu](images/web8.png) |
+| Aile Oluştur | ![Kategorileri Yönetme](images/web9.png) |
 
-Sorularınız veya geri bildirimleriniz için benimle iletişime geçebilirsiniz.
+---
+
+## 🤝 Katkıda Bulunma
+
+Projeye katkı sağlamak isterseniz bir **issue** oluşturabilir veya **pull request** gönderebilirsiniz.
+
+---
+
+## 📬 İletişim
+
+Görüş ve önerileriniz için benimle iletişime geçebilirsiniz.
+
