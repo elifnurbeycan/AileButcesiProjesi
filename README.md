@@ -143,6 +143,8 @@ INSERT INTO categories (name, type) VALUES
 ('Giyim', 'expense'),
 ('Diğer', 'expense');
 
+```
+
 ---
 
 ## 🖼️ Ekran Görüntüleri
