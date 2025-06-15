@@ -45,48 +45,6 @@ Uygulama, finansal şeffaflığı artırmayı ve aile içi bütçe yönetimini k
 * **Veritabanı Bağlantısı:** MySQLi (PHP'nin yerleşik kütüphanesi)
 * **Güvenlik:** `password_hash()` ve `password_verify()` ile şifre hashleme, PHP Session ile oturum yönetimi.
 
-## Kurulum ve Kullanım
-
-Projenizi yerel bilgisayarınızda veya canlı bir sunucuda çalıştırmak için aşağıdaki adımları izleyin.
-
-### Yerel Ortam Kurulumu (XAMPP/WAMP/MAMP)
-
-1.  **Web Sunucusu Kurulumu:** Bilgisayarınıza PHP ve MySQL içeren bir web sunucusu (örn. [XAMPP](https://www.apachefriends.org/tr/index.html), [WAMP](https://www.wampserver.com/en/), [MAMP](https://www.mamp.info/)) kurun.
-2.  **Proje Dosyaları:** Proje dosyalarını web sunucunuzun kök dizinine (örneğin XAMPP için `htdocs` klasörü) `aile_butcesi_projesi` adında bir klasöre kopyalayın. (`C:\xampp\htdocs\aile_butcesi_projesi`)
-3.  **Veritabanı Oluşturma:**
-    * Tarayıcınızda `http://localhost/phpmyadmin` adresine gidin.
-    * `family_budget_db` adında yeni bir veritabanı oluşturun.
-    * Veritabanını seçtikten sonra `SQL` sekmesine tıklayın.
-    * Proje klasörünüzdeki `schema.sql` dosyasının içeriğini kopyalayın ve SQL sorgu alanına yapıştırıp çalıştırın. Bu, gerekli tüm tabloları ve varsayılan kategorileri oluşturacaktır.
-4.  **Veritabanı Bağlantısı (`config.php`):**
-    * Proje klasörünüzdeki `includes/config.php` dosyasını açın.
-    * Veritabanı bağlantı bilgilerini yerel ortamınıza göre ayarlayın (örn: `DB_USERNAME` genellikle `root`, `DB_PASSWORD` genellikle boş `''`).
-    ```php
-    define('DB_SERVER', 'localhost');
-    define('DB_USERNAME', 'root');
-    define('DB_PASSWORD', '');
-    define('DB_NAME', 'family_budget_db');
-    ```
-5.  **Ana URL Ayarı (`includes/header.php`):**
-    * `includes/header.php` dosyasını açın.
-    * `BASE_URL` tanımını yerel projenizin klasörüne göre ayarlayın:
-    ```php
-    define('BASE_URL', '/aile_butcesi_projesi/');
-    ```
-6.  **`index.php` Yönlendirmesi:**
-    * Projenizin ana klasöründe (`aile_butcesi_projesi`) `index.php` adında yeni bir dosya oluşturun.
-    * İçine aşağıdaki kodu yapıştırın. Bu, ana URL'ye erişildiğinde sizi `dashboard.php`'ye yönlendirecektir:
-    ```php
-    <?php
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
-    require_once 'includes/config.php';
-    header("Location: " . BASE_URL . "dashboard.php");
-    exit();
-    ?>
-    ```
-7.  **Uygulamayı Çalıştırma:** Tarayıcınızda `http://localhost/aile_butcesi_projesi/` adresine gidin.
 
 ### Canlı Sunucuya Dağıtım (Hosting)
 
