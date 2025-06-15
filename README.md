@@ -54,11 +54,11 @@ Uygulama, finansal şeffaflığı artırmayı ve aile içi bütçe yönetimini k
 
 * **Giriş Sayfası:**
     ![Giriş Sayfası](images/web1.png)
-* **Kayıt Sayfası:**
+* **Ailelerim Sayfası:**
     ![Kayıt Sayfası](images/web2.png)
 
 
-* **Anasayfa (Dashboard):**
+* **Aile Detayları:**
     ![Anasayfa](images/web3.png)
 * **İşlem Ekleme Formu:**
     ![İşlem Ekleme Formu](images/web4.png)
@@ -66,13 +66,13 @@ Uygulama, finansal şeffaflığı artırmayı ve aile içi bütçe yönetimini k
     ![İşlemleri Listeleme](images/web5.png)
 
 
-* **Ailelerim Sayfası:**
+* **Finansal Özet:**
     ![Ailelerim Sayfası](images/web6.png)
-* **Aile Oluşturma Formu:**
+* **Kategori Ekleme:**
     ![Aile Oluşturma Formu](images/web7.png)
 * **Aileye Katılma Formu:**
     ![Aileye Katılma Formu](images/web8.png)
-* **Kategorileri Yönetme:**
+* **Aile Oluşturma Formu:**
     ![Kategorileri Yönetme](images/web9.png)
 
 
